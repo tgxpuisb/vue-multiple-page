@@ -38,7 +38,7 @@ if (!Array.isArray(baseWebpackConfig.plugins)) {
 }
 chunksObject.forEach(item => {
   let conf = {
-    filename: './dist/html/' + item.pathname + '.html',
+    filename: './html/' + item.pathname + '.html',
     template: item.templatePath,
     inject: false,
     minify: { //压缩HTML文件
@@ -51,11 +51,10 @@ chunksObject.forEach(item => {
       removeStyleLinkTypeAttributes: true
     }
   }
-  console.log(conf.filename)
 
   if (item.pathname in baseWebpackConfig.entry) {
     conf.inject = 'body'
-    conf.chunks = [item.pathname]
+    conf.chunks = ['manifest', 'vendor', item.pathname]
   }
 
   baseWebpackConfig.plugins.push(new HtmlWebpackPlugin(conf))
@@ -72,11 +71,11 @@ var webpackConfig = merge(baseWebpackConfig, {
   },
   devtool: config.build.productionSourceMap ? '#source-map' : false,
   output: {
-    path: config.build.assetsRoot,
+    path: config.build.assetsRoot + '/dist/',
     // filename: utils.assetsPath('js/[name].[chunkhash].js'),
     // chunkFilename: utils.assetsPath('js/[id].[chunkhash].js')
-    filename: 'dist/assets/js/[name].js?v=[chunkhash:16]',
-    chunkFilename: 'dist/assets/js/[id].js?v=[chunkhash:16]',
+    filename: 'assets/js/[name].js?v=[chunkhash:16]',
+    chunkFilename: 'assets/js/[id].js?v=[chunkhash:16]',
   },
   plugins: [
     // http://vuejs.github.io/vue-loader/en/workflow/production.html
@@ -96,7 +95,7 @@ var webpackConfig = merge(baseWebpackConfig, {
     // extract css into its own file
     new ExtractTextPlugin({
       // filename: utils.assetsPath('css/[name].[contenthash].css')
-      filename: 'dist/assets/css/[name].css?v=[contenthash:8]',
+      filename: 'assets/css/[name].css?v=[contenthash:8]',
       allChunks: true
     }),
     // Compress extracted CSS. We are using this plugin so that possible
